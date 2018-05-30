@@ -438,13 +438,38 @@ knitr::kable(head(countryCode[,c(1,2,3)],10))
 | 歐洲   | 奧地利   |   419  |
 
 ``` r
-#
+#如上表所示，台灣學生最喜歡去留學的國家前三名分別為，美國 澳大利亞 日本
 ```
 
 ### 台灣學生最喜歡去哪些國家留學面量圖
 
 ``` r
-#這是R Code Chunk
+library(RColorBrewer)
+library(choroplethr)
+library(choroplethrMaps)
+data(country.map)
+final.plot<-merge(country.map,countryCode,by="iso_a3",all.x=T)%>%
+  group_by(group)%>%
+  arrange(order)
+
+wmap<-ggplot()+ 
+  geom_polygon(data = final.plot,
+               aes(x=long,y=lat,group=group,fill=`總人數`),
+               color="black",
+               size=0.25,na.rm = T)+
+  coord_cartesian(xlim = c(-200, 200) ,ylim = c(-90, 90))+
+  coord_fixed()+ 
+  scale_fill_gradientn(colours = brewer.pal(7,"Reds"))+ 
+  theme_void()+
+  theme(text = element_text(family = "細明體"))+
+  labs(fill="單位(人)",title = "最喜歡去哪些國家留學面量圖")
+wmap
+```
+
+![](InternationalStudents_files/figure-markdown_github/FromTWNAbMap-1.png)
+
+``` r
+#如面量圖所示，台灣學生最喜歡去留學的國家很明顯為，美國 澳大利亞 日本
 ```
 
 綜合分析
